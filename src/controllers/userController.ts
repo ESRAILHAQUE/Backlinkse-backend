@@ -45,7 +45,7 @@ export const getUserById = asyncHandler(
  */
 export const createUser = asyncHandler(
   async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
-    const { name, email, password } = req.body;
+    const { name, email, password, isVerified, isSuspended, isActive, isDeleted } = req.body;
 
     // Validate required fields
     if (!name || !email || !password) {
@@ -63,6 +63,11 @@ export const createUser = asyncHandler(
       name,
       email,
       password, // Password will be hashed by pre-save middleware
+      // Admin-created accounts are verified by default unless specified
+      isVerified: typeof isVerified === 'boolean' ? isVerified : true,
+      isSuspended: typeof isSuspended === 'boolean' ? isSuspended : false,
+      isActive: typeof isActive === 'boolean' ? isActive : true,
+      isDeleted: typeof isDeleted === 'boolean' ? isDeleted : false,
     });
 
     // Remove password from response
@@ -82,12 +87,16 @@ export const createUser = asyncHandler(
 export const updateUser = asyncHandler(
   async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
     const { id } = req.params;
-    const { name, email } = req.body;
+    const { name, email, isVerified, isSuspended, isActive, isDeleted } = req.body;
 
     // Build update object (only include provided fields)
     const updateData: Partial<IUser> = {};
     if (name) updateData.name = name;
     if (email) updateData.email = email;
+    if (typeof isVerified === 'boolean') updateData.isVerified = isVerified;
+    if (typeof isSuspended === 'boolean') updateData.isSuspended = isSuspended;
+    if (typeof isActive === 'boolean') updateData.isActive = isActive;
+    if (typeof isDeleted === 'boolean') updateData.isDeleted = isDeleted;
 
     // Don't allow password updates through this endpoint
     if (req.body.password) {

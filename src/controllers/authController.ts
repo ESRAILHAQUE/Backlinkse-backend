@@ -6,6 +6,7 @@ import { asyncHandler } from '../utils/asyncHandler';
 import { sendSuccess } from '../utils/apiResponse';
 import { logger } from '../utils/logger';
 import { env } from '../config/env';
+import { AuthRequest } from '../middleware/auth';
 
 /**
  * Generate JWT Access Token
@@ -70,6 +71,11 @@ export const register = asyncHandler(
       name,
       email,
       password, // Password will be hashed by pre-save middleware
+      // New accounts require admin approval
+      isVerified: false,
+      isSuspended: false,
+      isActive: true,
+      isDeleted: false,
     });
 
     // Generate JWT tokens
@@ -122,6 +128,19 @@ export const login = asyncHandler(
       throw new AppError('Invalid email or password', 401);
     }
 
+    // Enforce account status before issuing tokens
+    if (user.isDeleted || !user.isActive) {
+      throw new AppError('Account is inactive or deleted. Please contact support.', 403);
+    }
+
+    if (user.isSuspended) {
+      throw new AppError('Account is suspended. Please contact support.', 403);
+    }
+
+    if (!user.isVerified) {
+      throw new AppError('Account is pending verification. Please wait for admin approval.', 403);
+    }
+
     // Generate JWT tokens
     const accessToken = generateAccessToken(user._id.toString());
     const refreshToken = generateRefreshToken(user._id.toString());
@@ -143,17 +162,10 @@ export const login = asyncHandler(
 /**
  * Get current authenticated user
  * GET /api/v1/auth/me
- * Note: This endpoint would typically require authentication middleware
  */
 export const getMe = asyncHandler(
-  async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
-    // In a real application, you would extract user ID from JWT token
-    // For now, this is a placeholder that would need authentication middleware
-    const userId = req.body.userId || req.query.userId;
-
-    if (!userId) {
-      throw new AppError('User ID is required', 400);
-    }
+  async (req: AuthRequest, res: Response, _next: NextFunction): Promise<void> => {
+    const userId = req.user!._id;
 
     const user = await User.findById(userId).select('-password').lean();
 

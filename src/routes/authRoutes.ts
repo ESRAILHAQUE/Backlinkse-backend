@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { register, login, getMe } from '../controllers/authController';
+import { authenticate } from '../middleware/auth';
 
 const router = Router();
 
@@ -117,6 +118,9 @@ router.post('/register', register);
  */
 router.post('/login', login);
 
+// Protected route - requires authentication
+router.get('/me', authenticate, getMe);
+
 /**
  * @swagger
  * /api/v1/auth/me:
@@ -160,7 +164,6 @@ router.post('/login', login);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/me', getMe);
 
 export default router;
 

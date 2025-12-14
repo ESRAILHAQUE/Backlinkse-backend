@@ -9,6 +9,10 @@ export interface IUser extends Document {
     name: string;
     email: string;
     password: string;
+    isVerified: boolean;
+    isSuspended: boolean;
+    isActive: boolean;
+    isDeleted: boolean;
     createdAt: Date;
     updatedAt: Date;
     comparePassword(candidatePassword: string): Promise<boolean>;
@@ -40,6 +44,22 @@ const userSchema = new Schema<IUser>(
             required: [true, 'Password is required'],
             minlength: [6, 'Password must be at least 6 characters'],
             select: false, // Don't return password by default in queries
+        },
+        isVerified: {
+            type: Boolean,
+            default: false,
+        },
+        isSuspended: {
+            type: Boolean,
+            default: false,
+        },
+        isActive: {
+            type: Boolean,
+            default: true,
+        },
+        isDeleted: {
+            type: Boolean,
+            default: false,
         },
     },
     {

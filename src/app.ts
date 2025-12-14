@@ -6,6 +6,14 @@ import { rateLimiter } from './middleware/rateLimiter';
 import { swaggerSpec } from './config/swagger';
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
+import dashboardRoutes from './routes/dashboardRoutes';
+import projectRoutes from './routes/projectRoutes';
+import orderRoutes from './routes/orderRoutes';
+import reportRoutes from './routes/reportRoutes';
+import supportRoutes from './routes/supportRoutes';
+import teamRoutes from './routes/teamRoutes';
+import paymentRoutes from './routes/paymentRoutes';
+import subscriptionRoutes from './routes/subscriptionRoutes';
 
 /**
  * Express Application Setup
@@ -69,6 +77,14 @@ app.get('/health', (_req: Request, res: Response) => {
 // Mount routes at /api/v1 prefix
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/dashboard', dashboardRoutes);
+app.use('/api/v1/projects', projectRoutes);
+app.use('/api/v1/orders', orderRoutes);
+app.use('/api/v1/reports', reportRoutes);
+app.use('/api/v1/support', supportRoutes);
+app.use('/api/v1/team', teamRoutes);
+app.use('/api/v1/payment', paymentRoutes);
+app.use('/api/v1/subscriptions', subscriptionRoutes);
 
 // Root endpoint
 app.get('/', (_req: Request, res: Response) => {
