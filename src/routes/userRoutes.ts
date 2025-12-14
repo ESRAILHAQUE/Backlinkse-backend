@@ -6,6 +6,9 @@ import {
   updateUser,
   deleteUser,
   approveUser,
+  getMe,
+  updateMe,
+  deleteMe,
 } from '../controllers/userController';
 import { authenticate } from '../middleware/auth';
 import { authorizeRoles } from '../middleware/authorize';
@@ -239,6 +242,11 @@ router.patch('/:id/verify', authenticate, authorizeRoles('admin'), approveUser);
  *               $ref: '#/components/schemas/Error'
  */
 router.delete('/:id', authenticate, authorizeRoles('admin'), deleteUser);
+
+// Self-service profile routes
+router.get('/me/profile', authenticate, getMe);
+router.patch('/me/profile', authenticate, updateMe);
+router.delete('/me/profile', authenticate, deleteMe);
 
 export default router;
 

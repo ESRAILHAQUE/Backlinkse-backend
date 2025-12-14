@@ -4,6 +4,7 @@ import { AppError } from '../utils/AppError';
 import { asyncHandler } from '../utils/asyncHandler';
 import { sendSuccess } from '../utils/apiResponse';
 import { logger } from '../utils/logger';
+import { AuthRequest } from '../middleware/auth';
 
 /**
  * Get all users
@@ -174,6 +175,81 @@ export const approveUser = asyncHandler(
     logger.info(`Approved user: ${id}`);
 
     sendSuccess(res, 'User approved successfully', { user });
+  }
+);
+
+/**
+ * Get current authenticated user (self)
+ * GET /api/v1/users/me
+ */
+export const getMe = asyncHandler(
+  async (req: AuthRequest, res: Response): Promise<void> => {
+    const userId = req.user?._id;
+    const user = await User.findById(userId).select('-password').lean();
+
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    sendSuccess(res, 'User retrieved successfully', { user });
+  }
+);
+
+/**
+ * Update current user (self)
+ * PATCH /api/v1/users/me
+ */
+export const updateMe = asyncHandler(
+  async (req: AuthRequest, res: Response): Promise<void> => {
+    const userId = req.user?._id;
+    const { name, email } = req.body;
+
+    const updateData: Partial<IUser> = {};
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
+
+    if (req.body.password) {
+      throw new AppError('Password cannot be updated through this endpoint', 400);
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      updateData,
+      { new: true, runValidators: true, select: '-password' }
+    ).lean();
+
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    sendSuccess(res, 'Profile updated successfully', { user });
+  }
+);
+
+/**
+ * Delete current user (self) - soft delete
+ * DELETE /api/v1/users/me
+ */
+export const deleteMe = asyncHandler(
+  async (req: AuthRequest, res: Response): Promise<void> => {
+    const userId = req.user?._id;
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        isDeleted: true,
+        isActive: false,
+        isSuspended: true,
+        isVerified: false,
+      },
+      { new: true, select: '-password' }
+    ).lean();
+
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+
+    sendSuccess(res, 'Account deleted successfully', { user });
   }
 );
 
