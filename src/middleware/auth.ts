@@ -12,6 +12,11 @@ export interface AuthRequest extends Request {
         _id: string;
         name: string;
         email: string;
+        role: 'admin' | 'moderator' | 'user';
+        isVerified: boolean;
+        isSuspended: boolean;
+        isActive: boolean;
+        isDeleted: boolean;
     };
 }
 
@@ -70,6 +75,11 @@ export const authenticate = async (
             _id: user._id.toString(),
             name: user.name,
             email: user.email,
+            role: user.role as 'admin' | 'moderator' | 'user',
+            isVerified: user.isVerified,
+            isSuspended: user.isSuspended,
+            isActive: user.isActive,
+            isDeleted: user.isDeleted,
         };
 
         next();

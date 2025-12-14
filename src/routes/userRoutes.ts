@@ -5,7 +5,10 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  approveUser,
 } from '../controllers/userController';
+import { authenticate } from '../middleware/auth';
+import { authorizeRoles } from '../middleware/authorize';
 
 const router = Router();
 
@@ -42,7 +45,7 @@ const router = Router();
  *                           type: number
  *                           example: 10
  */
-router.get('/', getAllUsers);
+router.get('/', authenticate, authorizeRoles('admin', 'moderator'), getAllUsers);
 
 /**
  * @swagger
@@ -81,7 +84,7 @@ router.get('/', getAllUsers);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:id', getUserById);
+router.get('/:id', authenticate, authorizeRoles('admin', 'moderator'), getUserById);
 
 /**
  * @swagger
@@ -142,7 +145,7 @@ router.get('/:id', getUserById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', createUser);
+router.post('/', authenticate, authorizeRoles('admin'), createUser);
 
 /**
  * @swagger
@@ -203,7 +206,8 @@ router.post('/', createUser);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch('/:id', updateUser);
+router.patch('/:id', authenticate, authorizeRoles('admin'), updateUser);
+router.patch('/:id/verify', authenticate, authorizeRoles('admin'), approveUser);
 
 /**
  * @swagger
@@ -234,7 +238,7 @@ router.patch('/:id', updateUser);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', deleteUser);
+router.delete('/:id', authenticate, authorizeRoles('admin'), deleteUser);
 
 export default router;
 

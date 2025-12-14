@@ -9,6 +9,7 @@ export interface IUser extends Document {
     name: string;
     email: string;
     password: string;
+    role: 'admin' | 'moderator' | 'user';
     isVerified: boolean;
     isSuspended: boolean;
     isActive: boolean;
@@ -44,6 +45,11 @@ const userSchema = new Schema<IUser>(
             required: [true, 'Password is required'],
             minlength: [6, 'Password must be at least 6 characters'],
             select: false, // Don't return password by default in queries
+        },
+        role: {
+            type: String,
+            enum: ['admin', 'moderator', 'user'],
+            default: 'user',
         },
         isVerified: {
             type: Boolean,

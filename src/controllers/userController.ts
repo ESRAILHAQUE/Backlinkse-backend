@@ -45,7 +45,7 @@ export const getUserById = asyncHandler(
  */
 export const createUser = asyncHandler(
   async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
-    const { name, email, password, isVerified, isSuspended, isActive, isDeleted } = req.body;
+    const { name, email, password, isVerified, isSuspended, isActive, isDeleted, role } = req.body;
 
     // Validate required fields
     if (!name || !email || !password) {
@@ -68,6 +68,7 @@ export const createUser = asyncHandler(
       isSuspended: typeof isSuspended === 'boolean' ? isSuspended : false,
       isActive: typeof isActive === 'boolean' ? isActive : true,
       isDeleted: typeof isDeleted === 'boolean' ? isDeleted : false,
+      role: role ?? 'user',
     });
 
     // Remove password from response
@@ -87,7 +88,7 @@ export const createUser = asyncHandler(
 export const updateUser = asyncHandler(
   async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
     const { id } = req.params;
-    const { name, email, isVerified, isSuspended, isActive, isDeleted } = req.body;
+    const { name, email, isVerified, isSuspended, isActive, isDeleted, role } = req.body;
 
     // Build update object (only include provided fields)
     const updateData: Partial<IUser> = {};
@@ -97,6 +98,7 @@ export const updateUser = asyncHandler(
     if (typeof isSuspended === 'boolean') updateData.isSuspended = isSuspended;
     if (typeof isActive === 'boolean') updateData.isActive = isActive;
     if (typeof isDeleted === 'boolean') updateData.isDeleted = isDeleted;
+    if (role) updateData.role = role as IUser['role'];
 
     // Don't allow password updates through this endpoint
     if (req.body.password) {
@@ -139,6 +141,39 @@ export const deleteUser = asyncHandler(
     logger.info(`Deleted user: ${id}`);
 
     sendSuccess(res, 'User deleted successfully');
+  }
+);
+
+/**
+ * Approve (verify) a pending user
+ * PATCH /api/v1/users/:id/verify
+ */
+export const approveUser = asyncHandler(
+  async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
+    const { id } = req.params;
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        isVerified: true,
+        isSuspended: false,
+        isActive: true,
+        isDeleted: false,
+      },
+      {
+        new: true,
+        runValidators: true,
+        select: '-password',
+      }
+    ).lean();
+
+    if (!user) {
+      throw new AppError(`User with ID ${id} not found`, 404);
+    }
+
+    logger.info(`Approved user: ${id}`);
+
+    sendSuccess(res, 'User approved successfully', { user });
   }
 );
 

@@ -72,6 +72,7 @@ export const register = asyncHandler(
       email,
       password, // Password will be hashed by pre-save middleware
       // New accounts require admin approval
+      role: 'user',
       isVerified: false,
       isSuspended: false,
       isActive: true,
