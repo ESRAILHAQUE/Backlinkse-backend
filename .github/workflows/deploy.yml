@@ -24,7 +24,7 @@ jobs:
           port: ${{ secrets.VPS_SSH_PORT || 22 }}
           script: |
             set -e
-            BACKEND_PATH="${BACKEND_PATH:-/var/www/backlinkse-backend}"
+            BACKEND_PATH="${BACKEND_PATH:-/var/www/Backlinkse/backend}"
             BACKEND_PORT="${BACKEND_PORT:-5004}"
             cd "$BACKEND_PATH"
             git fetch origin main
