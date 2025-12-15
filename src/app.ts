@@ -15,6 +15,7 @@ import teamRoutes from "./routes/teamRoutes";
 import paymentRoutes from "./routes/paymentRoutes";
 import subscriptionRoutes from "./routes/subscriptionRoutes";
 import pricingRoutes from "./routes/pricingRoutes";
+import serviceRoutes from "./routes/serviceRoutes";
 
 /**
  * Express Application Setup
@@ -121,6 +122,7 @@ app.use("/api/v1/team", teamRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/subscriptions", subscriptionRoutes);
 app.use("/api/v1/pricing", pricingRoutes);
+app.use("/api/v1/services", serviceRoutes);
 
 // Root endpoint
 app.get("/", (_req: Request, res: Response) => {
