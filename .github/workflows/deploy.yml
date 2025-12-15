@@ -35,4 +35,3 @@ jobs:
         env:
           BACKEND_PATH: ${{ secrets.VPS_BACKEND_PATH }}
           BACKEND_PORT: ${{ secrets.VPS_BACKEND_PORT }}
-
