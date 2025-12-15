@@ -1,20 +1,39 @@
-import express, { Application, Request, Response } from 'express';
-import swaggerUi from 'swagger-ui-express';
-import { errorHandler, notFoundHandler } from './middleware/errorHandler';
-import { corsMiddleware } from './middleware/cors';
-import { rateLimiter } from './middleware/rateLimiter';
-import { swaggerSpec } from './config/swagger';
-import userRoutes from './routes/userRoutes';
-import authRoutes from './routes/authRoutes';
-import dashboardRoutes from './routes/dashboardRoutes';
-import projectRoutes from './routes/projectRoutes';
-import orderRoutes from './routes/orderRoutes';
-import reportRoutes from './routes/reportRoutes';
-import supportRoutes from './routes/supportRoutes';
-import teamRoutes from './routes/teamRoutes';
-import paymentRoutes from './routes/paymentRoutes';
-import subscriptionRoutes from './routes/subscriptionRoutes';
-import pricingRoutes from './routes/pricingRoutes';
+<<<<<<< HEAD
+import express, { Application, Request, Response } from "express";
+import swaggerUi from "swagger-ui-express";
+import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
+import { corsMiddleware } from "./middleware/cors";
+import { rateLimiter } from "./middleware/rateLimiter";
+import { swaggerSpec } from "./config/swagger";
+import userRoutes from "./routes/userRoutes";
+import authRoutes from "./routes/authRoutes";
+import dashboardRoutes from "./routes/dashboardRoutes";
+import projectRoutes from "./routes/projectRoutes";
+import orderRoutes from "./routes/orderRoutes";
+import reportRoutes from "./routes/reportRoutes";
+import supportRoutes from "./routes/supportRoutes";
+import teamRoutes from "./routes/teamRoutes";
+import paymentRoutes from "./routes/paymentRoutes";
+import subscriptionRoutes from "./routes/subscriptionRoutes";
+import pricingRoutes from "./routes/pricingRoutes";
+=======
+import express, { Application, Request, Response } from "express";
+import swaggerUi from "swagger-ui-express";
+import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
+import { corsMiddleware } from "./middleware/cors";
+import { rateLimiter } from "./middleware/rateLimiter";
+import { swaggerSpec } from "./config/swagger";
+import userRoutes from "./routes/userRoutes";
+import authRoutes from "./routes/authRoutes";
+import dashboardRoutes from "./routes/dashboardRoutes";
+import projectRoutes from "./routes/projectRoutes";
+import orderRoutes from "./routes/orderRoutes";
+import reportRoutes from "./routes/reportRoutes";
+import supportRoutes from "./routes/supportRoutes";
+import teamRoutes from "./routes/teamRoutes";
+import paymentRoutes from "./routes/paymentRoutes";
+import subscriptionRoutes from "./routes/subscriptionRoutes";
+>>>>>>> 81ae8fdbd7144efd24b1df2e0eee5a9b50c9958d
 
 /**
  * Express Application Setup
@@ -35,12 +54,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Swagger API Documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-    customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: 'API Documentation',
-}));
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+        customCss: ".swagger-ui .topbar { display: none }",
+        customSiteTitle: "API Documentation",
+    })
+);
 
-// Health check endpoint
+// Health check endpoints
 /**
  * @swagger
  * /health:
@@ -66,34 +89,77 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
  *                   type: string
  *                   format: date-time
  */
-app.get('/health', (_req: Request, res: Response) => {
+const healthHandler = (_req: Request, res: Response) => {
     res.status(200).json({
         success: true,
-        message: 'Server is running',
+        message: "Server is running",
         timestamp: new Date().toISOString(),
     });
-});
+};
+
+// Root-level health
+app.get("/health", healthHandler);
+
+/**
+ * @swagger
+ * /api/v1/health:
+ *   get:
+ *     summary: Health check endpoint (v1)
+ *     description: Returns server status and timestamp
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: Server is running
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Server is running
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ */
+app.get("/api/v1/health", healthHandler);
 
 // API Routes
 // Mount routes at /api/v1 prefix
-app.use('/api/v1/users', userRoutes);
-app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/dashboard', dashboardRoutes);
-app.use('/api/v1/projects', projectRoutes);
-app.use('/api/v1/orders', orderRoutes);
-app.use('/api/v1/reports', reportRoutes);
-app.use('/api/v1/support', supportRoutes);
-app.use('/api/v1/team', teamRoutes);
-app.use('/api/v1/payment', paymentRoutes);
-app.use('/api/v1/subscriptions', subscriptionRoutes);
-app.use('/api/v1/pricing', pricingRoutes);
+<<<<<<< HEAD
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/dashboard", dashboardRoutes);
+app.use("/api/v1/projects", projectRoutes);
+app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/reports", reportRoutes);
+app.use("/api/v1/support", supportRoutes);
+app.use("/api/v1/team", teamRoutes);
+app.use("/api/v1/payment", paymentRoutes);
+app.use("/api/v1/subscriptions", subscriptionRoutes);
+app.use("/api/v1/pricing", pricingRoutes);
+=======
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/dashboard", dashboardRoutes);
+app.use("/api/v1/projects", projectRoutes);
+app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/reports", reportRoutes);
+app.use("/api/v1/support", supportRoutes);
+app.use("/api/v1/team", teamRoutes);
+app.use("/api/v1/payment", paymentRoutes);
+app.use("/api/v1/subscriptions", subscriptionRoutes);
+>>>>>>> 81ae8fdbd7144efd24b1df2e0eee5a9b50c9958d
 
 // Root endpoint
-app.get('/', (_req: Request, res: Response) => {
+app.get("/", (_req: Request, res: Response) => {
     res.status(200).json({
         success: true,
-        message: 'Welcome to the Backend API',
-        version: '1.0.0',
+        message: "Welcome to the Backend API",
+        version: "1.0.0",
     });
 });
 
@@ -104,4 +170,3 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 export default app;
-
