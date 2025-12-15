@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/auth';
+import { authorizeRoles } from '../middleware/authorize';
 import {
     getAllOrders,
     getOrderById,
@@ -15,7 +16,7 @@ router.use(authenticate);
 router.get('/', getAllOrders);
 router.get('/:id', getOrderById);
 router.post('/', createOrder);
-router.patch('/:id', updateOrder);
+router.patch('/:id', authorizeRoles('admin', 'moderator'), updateOrder);
 
 export default router;
 

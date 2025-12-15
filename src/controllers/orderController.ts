@@ -22,8 +22,13 @@ function generateOrderNumber(): string {
 export const getAllOrders = asyncHandler(
     async (req: AuthRequest, res: Response, _next: NextFunction): Promise<void> => {
         const userId = req.user!._id;
+        const role = req.user?.role;
 
-        const orders = await Order.find({ userId }).sort({ orderDate: -1 }).lean();
+        const query = role === 'admin' || role === 'moderator' ? {} : { userId };
+
+        const orders = await Order.find(query)
+            .sort({ orderDate: -1 })
+            .lean();
 
         sendSuccess(res, 'Orders retrieved successfully', { orders });
     }
