@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import express, { Application, Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
@@ -16,24 +15,6 @@ import teamRoutes from "./routes/teamRoutes";
 import paymentRoutes from "./routes/paymentRoutes";
 import subscriptionRoutes from "./routes/subscriptionRoutes";
 import pricingRoutes from "./routes/pricingRoutes";
-=======
-import express, { Application, Request, Response } from "express";
-import swaggerUi from "swagger-ui-express";
-import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
-import { corsMiddleware } from "./middleware/cors";
-import { rateLimiter } from "./middleware/rateLimiter";
-import { swaggerSpec } from "./config/swagger";
-import userRoutes from "./routes/userRoutes";
-import authRoutes from "./routes/authRoutes";
-import dashboardRoutes from "./routes/dashboardRoutes";
-import projectRoutes from "./routes/projectRoutes";
-import orderRoutes from "./routes/orderRoutes";
-import reportRoutes from "./routes/reportRoutes";
-import supportRoutes from "./routes/supportRoutes";
-import teamRoutes from "./routes/teamRoutes";
-import paymentRoutes from "./routes/paymentRoutes";
-import subscriptionRoutes from "./routes/subscriptionRoutes";
->>>>>>> 81ae8fdbd7144efd24b1df2e0eee5a9b50c9958d
 
 /**
  * Express Application Setup
@@ -129,7 +110,6 @@ app.get("/api/v1/health", healthHandler);
 
 // API Routes
 // Mount routes at /api/v1 prefix
-<<<<<<< HEAD
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
@@ -141,18 +121,6 @@ app.use("/api/v1/team", teamRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/subscriptions", subscriptionRoutes);
 app.use("/api/v1/pricing", pricingRoutes);
-=======
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/dashboard", dashboardRoutes);
-app.use("/api/v1/projects", projectRoutes);
-app.use("/api/v1/orders", orderRoutes);
-app.use("/api/v1/reports", reportRoutes);
-app.use("/api/v1/support", supportRoutes);
-app.use("/api/v1/team", teamRoutes);
-app.use("/api/v1/payment", paymentRoutes);
-app.use("/api/v1/subscriptions", subscriptionRoutes);
->>>>>>> 81ae8fdbd7144efd24b1df2e0eee5a9b50c9958d
 
 // Root endpoint
 app.get("/", (_req: Request, res: Response) => {
