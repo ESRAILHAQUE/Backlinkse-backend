@@ -17,6 +17,7 @@ import subscriptionRoutes from "./routes/subscriptionRoutes";
 import pricingRoutes from "./routes/pricingRoutes";
 import serviceRoutes from "./routes/serviceRoutes";
 import caseStudyRoutes from "./routes/caseStudyRoutes";
+import testimonialRoutes from "./routes/testimonialRoutes";
 
 /**
  * Express Application Setup
@@ -125,6 +126,7 @@ app.use("/api/v1/subscriptions", subscriptionRoutes);
 app.use("/api/v1/pricing", pricingRoutes);
 app.use("/api/v1/services", serviceRoutes);
 app.use("/api/v1/case-studies", caseStudyRoutes);
+app.use("/api/v1/testimonials", testimonialRoutes);
 
 // Root endpoint
 app.get("/", (_req: Request, res: Response) => {
