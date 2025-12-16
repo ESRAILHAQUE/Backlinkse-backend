@@ -22,6 +22,7 @@ import faqRoutes from "./routes/faqRoutes";
 import blogRoutes from "./routes/blogRoutes";
 import homepageRoutes from "./routes/homepageRoutes";
 import themeRoutes from "./routes/themeRoutes";
+import navigationRoutes from "./routes/navigationRoutes";
 
 /**
  * Express Application Setup
@@ -135,7 +136,7 @@ app.use("/api/v1/faqs", faqRoutes);
 app.use("/api/v1/blog", blogRoutes);
 app.use("/api/v1/homepage", homepageRoutes);
 app.use("/api/v1/theme", themeRoutes);
-app.use("/api/v1/theme", themeRoutes);
+app.use("/api/v1/navigation", navigationRoutes);
 
 // Root endpoint
 app.get("/", (_req: Request, res: Response) => {
