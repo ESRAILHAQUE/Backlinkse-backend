@@ -20,6 +20,7 @@ import caseStudyRoutes from "./routes/caseStudyRoutes";
 import testimonialRoutes from "./routes/testimonialRoutes";
 import faqRoutes from "./routes/faqRoutes";
 import blogRoutes from "./routes/blogRoutes";
+import homepageRoutes from "./routes/homepageRoutes";
 
 /**
  * Express Application Setup
@@ -131,6 +132,7 @@ app.use("/api/v1/case-studies", caseStudyRoutes);
 app.use("/api/v1/testimonials", testimonialRoutes);
 app.use("/api/v1/faqs", faqRoutes);
 app.use("/api/v1/blog", blogRoutes);
+app.use("/api/v1/homepage", homepageRoutes);
 
 // Root endpoint
 app.get("/", (_req: Request, res: Response) => {
