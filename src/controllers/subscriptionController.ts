@@ -44,6 +44,21 @@ export const getAllSubscriptions = asyncHandler(
 );
 
 /**
+ * Get all subscriptions (Admin only - all users)
+ * GET /api/v1/subscriptions/admin/all
+ */
+export const getAllSubscriptionsAdmin = asyncHandler(
+    async (_req: AuthRequest, res: Response, _next: NextFunction): Promise<void> => {
+        const subscriptions = await Subscription.find({})
+            .populate('userId', 'name email')
+            .sort({ createdAt: -1 })
+            .lean();
+
+        sendSuccess(res, 'All subscriptions retrieved successfully', { subscriptions });
+    }
+);
+
+/**
  * Create or update subscription
  * POST /api/v1/subscriptions
  */
@@ -102,6 +117,28 @@ export const cancelSubscription = asyncHandler(
 
         if (!subscription) {
             throw new AppError('Active subscription not found', 404);
+        }
+
+        sendSuccess(res, 'Subscription cancelled successfully', { subscription });
+    }
+);
+
+/**
+ * Cancel subscription (Admin - can cancel any subscription)
+ * PATCH /api/v1/subscriptions/:id/cancel-admin
+ */
+export const cancelSubscriptionAdmin = asyncHandler(
+    async (req: AuthRequest, res: Response, _next: NextFunction): Promise<void> => {
+        const { id } = req.params;
+
+        const subscription = await Subscription.findByIdAndUpdate(
+            id,
+            { status: 'Cancelled', cancelledAt: new Date() },
+            { new: true }
+        ).lean();
+
+        if (!subscription) {
+            throw new AppError('Subscription not found', 404);
         }
 
         sendSuccess(res, 'Subscription cancelled successfully', { subscription });
