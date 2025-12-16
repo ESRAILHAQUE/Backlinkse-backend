@@ -23,6 +23,7 @@ import blogRoutes from "./routes/blogRoutes";
 import homepageRoutes from "./routes/homepageRoutes";
 import themeRoutes from "./routes/themeRoutes";
 import navigationRoutes from "./routes/navigationRoutes";
+import liveChatRoutes from "./routes/liveChatRoutes";
 
 /**
  * Express Application Setup
@@ -137,6 +138,7 @@ app.use("/api/v1/blog", blogRoutes);
 app.use("/api/v1/homepage", homepageRoutes);
 app.use("/api/v1/theme", themeRoutes);
 app.use("/api/v1/navigation", navigationRoutes);
+app.use("/api/v1/live-chat", liveChatRoutes);
 
 // Root endpoint
 app.get("/", (_req: Request, res: Response) => {
