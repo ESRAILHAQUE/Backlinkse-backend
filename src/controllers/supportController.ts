@@ -113,3 +113,69 @@ export const updateTicket = asyncHandler(
     }
 );
 
+/**
+ * Get all support tickets (Admin only - all users)
+ * GET /api/v1/support/admin/all
+ */
+export const getAllTicketsAdmin = asyncHandler(
+    async (_req: AuthRequest, res: Response, _next: NextFunction): Promise<void> => {
+        const tickets = await SupportTicket.find({})
+            .populate('userId', 'name email')
+            .sort({ createdAt: -1 })
+            .lean();
+
+        sendSuccess(res, 'All support tickets retrieved successfully', { tickets });
+    }
+);
+
+/**
+ * Get ticket by ID (Admin - can access any ticket)
+ * GET /api/v1/support/admin/:id
+ */
+export const getTicketByIdAdmin = asyncHandler(
+    async (req: AuthRequest, res: Response, _next: NextFunction): Promise<void> => {
+        const { id } = req.params;
+
+        const ticket = await SupportTicket.findById(id)
+            .populate('userId', 'name email')
+            .lean();
+
+        if (!ticket) {
+            throw new AppError('Support ticket not found', 404);
+        }
+
+        sendSuccess(res, 'Support ticket retrieved successfully', { ticket });
+    }
+);
+
+/**
+ * Update support ticket (Admin - can update any ticket)
+ * PATCH /api/v1/support/admin/:id
+ */
+export const updateTicketAdmin = asyncHandler(
+    async (req: AuthRequest, res: Response, _next: NextFunction): Promise<void> => {
+        const { id } = req.params;
+        const { status, priority } = req.body;
+
+        const updateData: any = {
+            lastUpdate: new Date(),
+        };
+        if (status) updateData.status = status;
+        if (priority) updateData.priority = priority;
+
+        const ticket = await SupportTicket.findByIdAndUpdate(
+            id,
+            updateData,
+            { new: true, runValidators: true }
+        )
+            .populate('userId', 'name email')
+            .lean();
+
+        if (!ticket) {
+            throw new AppError('Support ticket not found', 404);
+        }
+
+        sendSuccess(res, 'Support ticket updated successfully', { ticket });
+    }
+);
+
