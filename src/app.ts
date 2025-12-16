@@ -21,6 +21,7 @@ import testimonialRoutes from "./routes/testimonialRoutes";
 import faqRoutes from "./routes/faqRoutes";
 import blogRoutes from "./routes/blogRoutes";
 import homepageRoutes from "./routes/homepageRoutes";
+import themeRoutes from "./routes/themeRoutes";
 
 /**
  * Express Application Setup
@@ -133,6 +134,8 @@ app.use("/api/v1/testimonials", testimonialRoutes);
 app.use("/api/v1/faqs", faqRoutes);
 app.use("/api/v1/blog", blogRoutes);
 app.use("/api/v1/homepage", homepageRoutes);
+app.use("/api/v1/theme", themeRoutes);
+app.use("/api/v1/theme", themeRoutes);
 
 // Root endpoint
 app.get("/", (_req: Request, res: Response) => {
