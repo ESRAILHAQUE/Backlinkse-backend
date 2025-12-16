@@ -24,6 +24,7 @@ import homepageRoutes from "./routes/homepageRoutes";
 import themeRoutes from "./routes/themeRoutes";
 import navigationRoutes from "./routes/navigationRoutes";
 import liveChatRoutes from "./routes/liveChatRoutes";
+import globalSettingsRoutes from "./routes/globalSettingsRoutes";
 
 /**
  * Express Application Setup
@@ -139,6 +140,7 @@ app.use("/api/v1/homepage", homepageRoutes);
 app.use("/api/v1/theme", themeRoutes);
 app.use("/api/v1/navigation", navigationRoutes);
 app.use("/api/v1/live-chat", liveChatRoutes);
+app.use("/api/v1/settings", globalSettingsRoutes);
 
 // Root endpoint
 app.get("/", (_req: Request, res: Response) => {
