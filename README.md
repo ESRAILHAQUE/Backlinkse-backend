@@ -233,3 +233,6 @@ ISC
 
 For issues and questions, please open an issue in the repository.
 
+## Deployment
+
+- CI/CD via GitHub Actions deploys to `/var/www/Backlinkse/backend` with PM2 on port 5004.
